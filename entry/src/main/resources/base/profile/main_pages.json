@@ -1,0 +1,10 @@
+{
+  "src": [
+    "pages/SplashScreen",
+    "pages/Index",
+    "pages/MapPage",
+    "pages/FriendsPage",
+    "pages/AddFriendPage",
+    "pages/FriendPage"
+  ]
+}
