@@ -1,10 +1,7 @@
 import {mainMenuItems} from '../data/MainMenuItems';
 import {MainMenuItem} from '../types/MainMenuItem';
-import { ComponentContent, LengthMetrics, promptAction } from '@kit.ArkUI';
 import { UIContext } from '@kit.ArkUI';
-import { ArcList, ArcListItem, ArcListAttribute, ArcListItemAttribute } from '@kit.ArkUI';
-import {router} from '@kit.ArkUI'
-import { common } from '@kit.AbilityKit';
+import { ArcList, ArcListItem, ArcListAttribute, ArcListItemAttribute, ComponentContent, LengthMetrics } from '@kit.ArkUI';
 
 @Builder
 function buildText() {
@@ -63,7 +60,7 @@ struct Index {
               .backgroundColor('#f0f8ff')
             }.align(Alignment.Center).onClick(() => {
 
-              router.pushUrl({
+              this.getUIContext().getRouter().pushUrl({
                 url: `pages/${item.pageName}`
               });
 

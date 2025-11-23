@@ -1,7 +1,9 @@
-import { AbilityConstant, ConfigurationConstant, UIAbility, Want } from '@kit.AbilityKit';
+import { AbilityConstant, common, ConfigurationConstant, UIAbility, Want } from '@kit.AbilityKit';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { window } from '@kit.ArkUI';
 import relationalStore from '@ohos.data.relationalStore';
+
+export let globalAbilityContext: common.UIAbilityContext | null = null;
 
 export let rdbStore: relationalStore.RdbStore;
 interface StoreConfig {
@@ -15,6 +17,7 @@ const DOMAIN = 0x0000;
 
 export default class EntryAbility extends UIAbility {
  public async onCreate(want: Want, launchParam: AbilityConstant.LaunchParam) {
+    globalAbilityContext = this.context;
     this.context.getApplicationContext().setColorMode(ConfigurationConstant.ColorMode.COLOR_MODE_NOT_SET);
     hilog.info(DOMAIN, 'testTag', '%{public}s', 'Ability onCreate');
 
@@ -73,4 +76,11 @@ export default class EntryAbility extends UIAbility {
     // Ability has back to background
     hilog.info(DOMAIN, 'testTag', '%{public}s', 'Ability onBackground');
   }
+}
+
+export function getGlobalContext(): common.UIAbilityContext {
+  if (!globalAbilityContext) {
+    throw new Error('Global context is not initialized. Make sure EntryAbility is created.');
+  }
+  return globalAbilityContext;
 }

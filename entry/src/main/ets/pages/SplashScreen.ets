@@ -1,12 +1,13 @@
 import { abilityAccessCtrl, bundleManager, common, PermissionRequestResult, Permissions } from '@kit.AbilityKit';
 import { BusinessError } from '@kit.BasicServicesKit';
-import { router } from '@kit.ArkUI';
+import { getGlobalContext } from '../entryability/EntryAbility';
+
 
 @Entry
 @Component
 struct SplashScreen {
 
-  @State abilityContext: common.UIAbilityContext = getContext(this) as common.UIAbilityContext;
+  private context: common.UIAbilityContext = getGlobalContext();
 
   async checkPermissions() {
     const permissions: Array<Permissions> = ['ohos.permission.LOCATION', 'ohos.permission.APPROXIMATELY_LOCATION', 'ohos.permission.LOCATION_IN_BACKGROUND'];
@@ -20,7 +21,7 @@ struct SplashScreen {
     }
 
     if (allGranted) {
-      router.push({
+      this.getUIContext().getRouter().pushUrl({
         url: 'pages/Index'
       })
     } else {
@@ -31,15 +32,13 @@ struct SplashScreen {
 
   requestPermissions(): void {
     let atManager: abilityAccessCtrl.AtManager = abilityAccessCtrl.createAtManager();
-    atManager.requestPermissionsFromUser(this.abilityContext, ['ohos.permission.LOCATION', 'ohos.permission.APPROXIMATELY_LOCATION'])
+    atManager.requestPermissionsFromUser(this.context, ['ohos.permission.LOCATION', 'ohos.permission.APPROXIMATELY_LOCATION'])
       .then((data: PermissionRequestResult) => {
-        console.info('Permission request result: ' + JSON.stringify(data));
-
         this.checkPermissionsAfterRequest();
       })
       .catch((err: BusinessError) => {
         console.error(`Failed to request permissions from user. Code is ${err.code}, message is ${err.message}`);
-        router.pushUrl({
+        this.getUIContext().getRouter().pushUrl({
           url: 'pages/Index'
         })
       });
@@ -58,11 +57,11 @@ struct SplashScreen {
     }
 
     if (allGranted) {
-      router.pushUrl({
+      this.getUIContext().getRouter().pushUrl({
         url: 'pages/Index'
       })
     } else {
-      router.pushUrl({
+      this.getUIContext().getRouter().pushUrl({
         url: 'pages/Index'
       })
     }

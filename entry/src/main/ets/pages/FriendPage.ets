@@ -1,5 +1,4 @@
 import { Friend } from '../types/Friend';
-import router from '@ohos.router';
 import { deleteFriend, updateFriend } from '../utils/FriendUtils';
 import { common } from '@kit.AbilityKit';
 import prompt from '@ohos.prompt';
@@ -13,7 +12,7 @@ struct FriendPage {
   @State editName: string = '';
 
   aboutToAppear(): void {
-    const params = router.getParams() as Friend;
+    const params = this.getUIContext().getRouter().getParams() as Friend;
     if (params) {
       this.friend = {
         id: params.id,
@@ -87,7 +86,7 @@ struct FriendPage {
                 duration: 2000
               });
               setTimeout(() => {
-                router.back();
+                this.getUIContext().getRouter().back();
               }, 1000);
             })
             .catch((error: BusinessError) => {

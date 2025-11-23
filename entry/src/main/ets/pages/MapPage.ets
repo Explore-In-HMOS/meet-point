@@ -8,7 +8,7 @@ import {Location} from '../types/Location'
 @Entry
 @Component
 struct MapPage {
-  private TAG = "HuaweiMapDemo";
+  private TAG = 'HuaweiMapDemo';
   private mapOptions?: mapCommon.MapOptions;
   private callback?: AsyncCallback<map.MapComponentController>;
   private mapController?: map.MapComponentController;
@@ -68,7 +68,7 @@ struct MapPage {
           this.addFriendMarkers();
           this.setupMarkerClickEvents();
         }
-        this.mapEventManager.on("mapLoad", callback);
+        this.mapEventManager.on('mapLoad', callback);
       } else {
         console.error(`Failed to initialize the map. Code: ${err.code}; message: ${err.message}`);
       }
