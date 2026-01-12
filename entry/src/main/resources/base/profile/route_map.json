@@ -1,0 +1,44 @@
+{
+  "routerMap": [
+    {
+      "name": "Index",
+      "pageSourceFile": "src/main/ets/pages/Index.ets",
+      "buildFunction": "IndexBuilder",
+      "data": {
+        "description" : "this is Index Page"
+      }
+    },
+    {
+      "name": "FriendsPage",
+      "pageSourceFile": "src/main/ets/pages/FriendsPage.ets",
+      "buildFunction": "FriendsPageBuilder",
+      "data": {
+        "description" : "this is Friends Page"
+      }
+    },
+    {
+      "name": "FriendPage",
+      "pageSourceFile": "src/main/ets/pages/FriendPage.ets",
+      "buildFunction": "FriendPageBuilder",
+      "data": {
+        "description" : "this is Friend Page"
+      }
+    },
+    {
+      "name": "AddFriendPage",
+      "pageSourceFile": "src/main/ets/pages/AddFriendPage.ets",
+      "buildFunction": "AddFriendPageBuilder",
+      "data": {
+        "description" : "this is Add Friend Page"
+      }
+    },
+    {
+      "name": "MapPage",
+      "pageSourceFile": "src/main/ets/pages/MapPage.ets",
+      "buildFunction": "MapPageBuilder",
+      "data": {
+        "description" : "this is Map Page"
+      }
+    }
+  ]
+}

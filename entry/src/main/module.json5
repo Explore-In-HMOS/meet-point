@@ -4,6 +4,7 @@
     "type": "entry",
     "description": "$string:module_desc",
     "mainElement": "EntryAbility",
+    "routerMap": "$profile:route_map",
     "deviceTypes": [
       "wearable"
     ],

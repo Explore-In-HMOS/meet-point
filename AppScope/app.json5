@@ -1,6 +1,6 @@
 {
   "app": {
-    "bundleName": "com.hmosdemos.meetpoint",
+    "bundleName": "com.hmosdemos.wearable.meet_point",
     "vendor": "hmosdemos",
     "versionCode": 1000000,
     "versionName": "1.0.0",

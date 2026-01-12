@@ -5,28 +5,27 @@ import { ArcList, ArcListItem, ArcListAttribute, ArcListItemAttribute, LengthMet
 
 @Builder
 function buildText() {
-  Column() {
-    Text('Friends')
-      .fontSize('36px')
-      .fontWeight(FontWeight.Bold)
-  }
+  Text('Friends')
+    .fontSize('36px')
+    .fontWeight(FontWeight.Bold)
 }
 
-@Entry
+@Builder
+export function FriendsPageBuilder() {
+  FriendsPage()
+}
+
 @Component
 struct FriendsPage {
 
   @State friends: Friend[] = [];
-
+  @Consume pathStack: NavPathStack
   private watchSize: string = '466px';
   private listSize: string = '410px';
 
   private navigateToAddFriend() {
-    this.getUIContext().getRouter().pushUrl({
-      url: 'pages/AddFriendPage'
-    });
+    this.pathStack.pushPathByName('AddFriendPage',null)
   }
-
 
   private async loadFriends() {
     try {
@@ -42,45 +41,18 @@ struct FriendsPage {
   }
 
   build() {
-    Column() {
-      Stack() {
-        ArcList({ initialIndex: 0 }) {
-          ArcListItem() {
-            Button({ type: ButtonType.Capsule }) {
-              Row() {
-                Text('+ Add Friend')
-                  .fontSize('24px')
-              }
-              .justifyContent(FlexAlign.Center)
-              .width('100%')
-            }
-            .width(this.listSize)
-            .height('100px')
-            .fontSize('24px')
-            .fontColor(Color.Black)
-            .fontWeight(FontWeight.Bold)
-            .focusable(true)
-            .opacity(0.9)
-            .focusOnTouch(true)
-            .backgroundColor('#e6f7ff')
-            .onClick(() => {
-              this.navigateToAddFriend();
-            })
-          }.align(Alignment.Center)
-          ForEach(this.friends, (item: Friend) => {
+    NavDestination() {
+      Column() {
+        Stack() {
+          ArcList({ initialIndex: 0 }) {
             ArcListItem() {
               Button({ type: ButtonType.Capsule }) {
-                Column() {
-                  Text(item.name)
-                    .fontSize('34px')
-                    .fontWeight(FontWeight.Bold)
-                    .fontColor(Color.Black)
-                    .textAlign(TextAlign.Center)
-                    .width('100%')
-                    .margin({ bottom: 1 })
+                Row() {
+                  Text('+ Add Friend')
+                    .fontSize('24px')
                 }
+                .justifyContent(FlexAlign.Center)
                 .width('100%')
-                .padding(10)
               }
               .width(this.listSize)
               .height('100px')
@@ -90,30 +62,57 @@ struct FriendsPage {
               .focusable(true)
               .opacity(0.9)
               .focusOnTouch(true)
-              .backgroundColor('#f0f8ff')
+              .backgroundColor('#e6f7ff')
+              .onClick(() => {
+                this.navigateToAddFriend();
+              })
             }.align(Alignment.Center)
-            .onClick(() => {
-              this.getUIContext().getRouter().pushUrl({
-                url: 'pages/FriendPage',
-                params: item
-              });
-            })
+            ForEach(this.friends, (item: Friend) => {
+              ArcListItem() {
+                Button({ type: ButtonType.Capsule }) {
+                  Column() {
+                    Text(item.name)
+                      .fontSize('34px')
+                      .fontWeight(FontWeight.Bold)
+                      .fontColor(Color.Black)
+                      .textAlign(TextAlign.Center)
+                      .width('100%')
+                      .margin({ bottom: 1 })
+                  }
+                  .width('100%')
+                  .padding(10)
+                }
+                .width(this.listSize)
+                .height('100px')
+                .fontSize('24px')
+                .fontColor(Color.Black)
+                .fontWeight(FontWeight.Bold)
+                .focusable(true)
+                .opacity(0.9)
+                .focusOnTouch(true)
+                .backgroundColor('#f0f8ff')
+              }.align(Alignment.Center)
+              .onClick(() => {
+                this.pathStack.pushPathByName('FriendPage',item)
+              })
 
-          }, (friend: Friend) => friend.name)
+            }, (friend: Friend) => friend.name)
+          }
+          .space(LengthMetrics.px(10))
+          .borderRadius(this.watchSize)
+          .focusable(true)
+          .focusOnTouch(true)
+          .defaultFocus(true)
         }
-        .space(LengthMetrics.px(10))
+        .align(Alignment.Center)
+        .width(this.watchSize)
+        .height(this.watchSize)
+        .border({color: Color.Black, width: 3})
         .borderRadius(this.watchSize)
-        .focusable(true)
-        .focusOnTouch(true)
-        .defaultFocus(true)
       }
-      .align(Alignment.Center)
-      .width(this.watchSize)
-      .height(this.watchSize)
-      .border({color: Color.Black, width: 3})
-      .borderRadius(this.watchSize)
+      .height('100%')
+      .width('100%')
     }
-    .height('100%')
-    .width('100%')
+    .hideTitleBar(true)
   }
 }

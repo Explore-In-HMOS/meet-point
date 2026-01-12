@@ -1,10 +1,10 @@
-import { common } from '@kit.AbilityKit';
+
 import { BusinessError } from '@kit.BasicServicesKit';
 import { promptAction } from '@kit.ArkUI';
 import relationalStore from '@ohos.data.relationalStore';
 import { Friend } from '../types/Friend';
 import { Location } from '../types/Location';
-import { rdbStore } from '../entryability/EntryAbility';
+import { GlobalRdbStore } from '../entryability/EntryAbility';
 
 function generateTimestampCoordinates(): Location {
   const timestamp = new Date().getTime();
@@ -38,15 +38,15 @@ export async function addFriend(fullName: string): Promise<void> {
       'longitude': location.longitude
     };
 
-    await rdbStore.insert('friends', valueBucket);
-    promptAction.showToast({
+    await GlobalRdbStore.rdbStore.insert('friends', valueBucket);
+    promptAction.openToast({
       message: 'Friend added successfully',
       duration: 3000
     });
 
   } catch (error) {
     console.error('Unexpected error in addFriend:', error);
-    promptAction.showToast({
+    promptAction.openToast({
       message: 'Unexpected error occurred while adding friend',
       duration: 3000
     });
@@ -56,7 +56,7 @@ export async function addFriend(fullName: string): Promise<void> {
 export async function getFriends(): Promise<Friend[]> {
   try {
     const predicates = new relationalStore.RdbPredicates('friends');
-    const resultSet = await rdbStore.query(predicates, ['id', 'name', 'latitude', 'longitude']);
+    const resultSet = await GlobalRdbStore.rdbStore.query(predicates, ['id', 'name', 'latitude', 'longitude']);
 
     if (!resultSet || resultSet.rowCount === 0) {
       return [];
@@ -82,7 +82,7 @@ export async function getFriends(): Promise<Friend[]> {
 
   } catch (error) {
     console.error('Unexpected error in getFriends:', error);
-    promptAction.showToast({
+    promptAction.openToast({
       message: 'Error getting friends: ' + (error as BusinessError).code,
       duration: 3000
     });
@@ -95,15 +95,15 @@ export async function deleteFriend(id: number): Promise<void> {
     const predicates = new relationalStore.RdbPredicates('friends');
     predicates.equalTo('id', id);
 
-    const deletedRows = await rdbStore.delete(predicates);
+    const deletedRows = await GlobalRdbStore.rdbStore.delete(predicates);
 
     if (deletedRows > 0) {
-      promptAction.showToast({
+      promptAction.openToast({
         message: 'Friend deleted successfully',
         duration: 3000
       });
     } else {
-      promptAction.showToast({
+      promptAction.openToast({
         message: 'Friend not found in database',
         duration: 3000
       });
@@ -111,7 +111,7 @@ export async function deleteFriend(id: number): Promise<void> {
 
   } catch (error) {
     console.error('Unexpected error in deleteFriend:', error);
-    promptAction.showToast({
+    promptAction.openToast({
       message: 'Unexpected error occurred while deleting friend',
       duration: 3000
     });
@@ -127,22 +127,22 @@ export async function updateFriend(id: number, fullName: string): Promise<void> 
       'name': fullName
     };
 
-    const updatedRows = await rdbStore.update(valueBucket, predicates);
+    const updatedRows = await GlobalRdbStore.rdbStore.update(valueBucket, predicates);
 
     if (updatedRows > 0) {
-      promptAction.showToast({
+      promptAction.openToast({
         message: 'Friend updated successfully',
         duration: 3000
       });
     } else {
-      promptAction.showToast({
+      promptAction.openToast({
         message: 'Friend not found in database',
         duration: 3000
       });
     }
   } catch (error) {
     console.error('Unexpected error in updateFriend:', error);
-    promptAction.showToast({
+    promptAction.openToast({
       message: 'Unexpected error occurred while updating friend',
       duration: 3000
     });

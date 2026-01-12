@@ -2,12 +2,12 @@ import { abilityAccessCtrl, bundleManager, common, PermissionRequestResult, Perm
 import { BusinessError } from '@kit.BasicServicesKit';
 import { getGlobalContext } from '../entryability/EntryAbility';
 
-
 @Entry
 @Component
 struct SplashScreen {
 
   private context: common.UIAbilityContext = getGlobalContext();
+  @Provide pathStack: NavPathStack = new NavPathStack()
 
   async checkPermissions() {
     const permissions: Array<Permissions> = ['ohos.permission.LOCATION', 'ohos.permission.APPROXIMATELY_LOCATION', 'ohos.permission.LOCATION_IN_BACKGROUND'];
@@ -21,14 +21,11 @@ struct SplashScreen {
     }
 
     if (allGranted) {
-      this.getUIContext().getRouter().pushUrl({
-        url: 'pages/Index'
-      })
+      this.pathStack.pushPathByName('Index',null)
     } else {
       this.requestPermissions();
     }
   }
-
 
   requestPermissions(): void {
     let atManager: abilityAccessCtrl.AtManager = abilityAccessCtrl.createAtManager();
@@ -38,9 +35,7 @@ struct SplashScreen {
       })
       .catch((err: BusinessError) => {
         console.error(`Failed to request permissions from user. Code is ${err.code}, message is ${err.message}`);
-        this.getUIContext().getRouter().pushUrl({
-          url: 'pages/Index'
-        })
+        this.pathStack.pushPathByName('Index',null)
       });
   }
 
@@ -57,13 +52,9 @@ struct SplashScreen {
     }
 
     if (allGranted) {
-      this.getUIContext().getRouter().pushUrl({
-        url: 'pages/Index'
-      })
+      this.pathStack.pushPathByName('Index',null)
     } else {
-      this.getUIContext().getRouter().pushUrl({
-        url: 'pages/Index'
-      })
+      this.pathStack.pushPathByName('Index',null)
     }
   }
 
@@ -72,16 +63,14 @@ struct SplashScreen {
       let atManager: abilityAccessCtrl.AtManager = abilityAccessCtrl.createAtManager();
       let grantStatus: abilityAccessCtrl.GrantStatus = abilityAccessCtrl.GrantStatus.PERMISSION_DENIED;
 
-      let bundleInfo: bundleManager.BundleInfo = await bundleManager.getBundleInfoForSelf(bundleManager.BundleFlag.GET_BUNDLE_INFO_WITH_APPLICATION);
-      console.info('Succeeded in getting Bundle.');
+      let bundleInfo: bundleManager.BundleInfo = await bundleManager.getBundleInfoForSelf(bundleManager.
+      BundleFlag.GET_BUNDLE_INFO_WITH_APPLICATION);
       let appInfo: bundleManager.ApplicationInfo = bundleInfo.appInfo;
       let tokenId: number = appInfo.accessTokenId;
 
       grantStatus = await atManager.checkAccessToken(tokenId, permission);
-      console.info('Succeeded in checking access token.');
       return grantStatus;
     } catch (error) {
-      console.error('Error checking access token:', error);
       return abilityAccessCtrl.GrantStatus.PERMISSION_DENIED;
     }
   }
@@ -91,10 +80,13 @@ struct SplashScreen {
   }
 
   build() {
-    Stack() {
-      LoadingProgress()
+    Navigation(this.pathStack) {
+      Stack() {
+        LoadingProgress()
+      }
+      .height('100%')
+      .width('100%')
     }
-    .height('100%')
-    .width('100%')
+    .mode(NavigationMode.Stack)
   }
 }

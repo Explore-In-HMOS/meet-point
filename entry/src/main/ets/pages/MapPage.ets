@@ -5,7 +5,11 @@ import {Friend} from '../types/Friend';
 import {getFriends} from '../utils/FriendUtils';
 import {Location} from '../types/Location'
 
-@Entry
+@Builder
+export function MapPageBuilder() {
+  MapPage()
+}
+
 @Component
 struct MapPage {
   private TAG = 'HuaweiMapDemo';
@@ -13,11 +17,10 @@ struct MapPage {
   private callback?: AsyncCallback<map.MapComponentController>;
   private mapController?: map.MapComponentController;
   private mapEventManager?: map.MapEventManager;
-
-  @State friends: Friend[] = [];
-  @State selectedFriend: Friend | null = null;
-  @State distanceToFriend: number = 0;
-  @State currentLocation: geoLocationManager.Location | null = null;
+  @Consume pathStack: NavPathStack
+  private friends: Friend[] = [];
+  private selectedFriend: Friend | null = null;
+  private currentLocation: geoLocationManager.Location | null = null;
   private locationRequest: geoLocationManager.LocationRequest = {
     priority: geoLocationManager.LocationRequestPriority.ACCURACY,
     timeInterval: 0,
@@ -87,7 +90,7 @@ struct MapPage {
       const cameraPosition: mapCommon.CameraPosition = {
         target: {
           latitude: location.latitude,
-          longitude: location.longitude,
+          longitude: location.longitude
         },
         zoom: 1,
         tilt: 0,
@@ -160,7 +163,9 @@ struct MapPage {
   }
 
   private setupMarkerClickEvents() {
-    if (!this.mapEventManager) return;
+    if (!this.mapEventManager) {
+      return;
+    }
     this.mapEventManager.on('markerClick', (marker) => {
       this.onMarkerClick(marker);
     });
@@ -185,7 +190,7 @@ struct MapPage {
         location: midPoint,
         radius: 10000, // meters
         pageSize: 20,
-        pageIndex: 1,
+        pageIndex: 1
       };
       const result = await site.nearbySearch(nearbySearchParams);
       const params: navi.DrivingRouteParams = {
@@ -204,8 +209,7 @@ struct MapPage {
         };
         const routeMarker : mapCommon.MarkerOptions = {
           position: {latitude: result.sites![0].location!.latitude, longitude: result.sites![0].location!.longitude},
-          icon : $r('app.media.pinMapMarker'),
-
+          icon : $r('app.media.pinMapMarker')
         }
         await this.mapController!.addMarker(routeMarker);
         await this.mapController!.addPolyline(polyline);
@@ -218,7 +222,6 @@ struct MapPage {
       geoLocationManager.off('locationChange', this.locationChangeCallback);
     }
   }
-
 
   onPageShow(): void {
     if (this.mapController) {
@@ -233,8 +236,11 @@ struct MapPage {
   }
 
   build() {
-    Stack() {
-      MapComponent({ mapOptions: this.mapOptions, mapCallback: this.callback }).width('100%').height('100%');
-    }.height('100%')
+    NavDestination() {
+      Stack() {
+        MapComponent({ mapOptions: this.mapOptions, mapCallback: this.callback }).width('100%').height('100%');
+      }.height('100%')
+    }
+    .hideTitleBar(true)
   }
 }

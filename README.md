@@ -1,4 +1,4 @@
-> **Note:** To access all shared projects, get information about environment setup, and view other guides, please visit [Explore-In-HMOS-Wearable Index](https://github.com/Explore-In-HMOS-Wearable/hmos-index).
+> **Note:** To access all shared projects, get information about environment setup, and view other guides, please visit 
 
 # Meet Point
 
@@ -10,7 +10,7 @@ Meet Point is a wearable application that allows users to see the most optimal c
   <img src="screenshots/ss1.png" width="24%" >
   <img src="screenshots/ss2.png" width="24%" >
   <img src="screenshots/ss3.png" width="24%" >
-  <img src="screenshots/ss4.png" width="24%" >
+<img src="screenshots/ss4.png" width="24%" >
 </div>
 
 # Use Cases
@@ -37,8 +37,7 @@ Meet Point is a wearable application that allows users to see the most optimal c
   > Required to get approximate location.
 - `ohos.permission.LOCATION_IN_BACKGROUND`
   > Required to use location services in background
-
-
+  
 # Directory Structure
 
 ```
@@ -68,7 +67,6 @@ entry/src/main/ets/
 └───utils
         FriendUtils.ets
 
-
 ```
 
 # Constraints and Restrictions
@@ -86,6 +84,3 @@ entry/src/main/ets/
 
 **Meet Point** is distributed under the terms of the MIT License
 See the [LICENSE](/LICENSE) for more information.
-
-
-
